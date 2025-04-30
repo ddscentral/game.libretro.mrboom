@@ -23,7 +23,7 @@ elseif(_AMD64_)
    set(HOST mingw-w64-x86_64)
    set(MINGW_PATH "mingw64")
 elseif(_M_ARM64)
-   set(HOST mingw-w64-cross-mingwarm64)
+   set(HOST mingw-w64-clang-aarch64)
    set(MINGW_PATH "mingw64")
 else()
    message(FATAL_ERROR "Unsupported architecture")
@@ -37,13 +37,13 @@ execute_process(COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/usr/bin/bash.exe --login -c 
 execute_process(COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/usr/bin/bash.exe --login -c "pacman --noconfirm -S make ${HOST}-gcc")
 execute_process(COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/usr/bin/bash.exe --login -c "sed -i s/^#sXferCommand/XferCommand/g /etc/pacman.conf")
 
-if($ENV{PROCESSOR_ARCHITECTURE} MATCHES "ARM64")
+#if($ENV{PROCESSOR_ARCHITECTURE} MATCHES "ARM64")
    # mingw-w64-cross-mingwarm64 does not create gcc anywhere in the path
-   execute_process(COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/usr/bin/bash.exe -lc
-    "which gcc || find /opt/bin -type f -name 'aarch64-w64-mingw32-*' -exec /bin/bash -c 'ln -s {} $(echo /opt/bin/{} | sed -e ''s#/opt/bin/aarch64-w64-mingw32-##g'')' \\;")
-   execute_process(COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/usr/bin/bash.exe -lc
-   "which cc || ln -s /opt/bin/gcc /opt/bin/cc")
-endif()
+   #execute_process(COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/usr/bin/bash.exe -lc
+   #"which gcc || find /opt/bin -type f -name 'aarch64-w64-mingw32-*' -exec /bin/bash -c 'ln -s {} $(echo /opt/bin/{} | sed -e ''s#/opt/bin/aarch64-w64-mingw32-##g'')' \\;")
+   #execute_process(COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/usr/bin/bash.exe -lc
+   #"which cc || ln -s /opt/bin/gcc /opt/bin/cc")
+#endif()
 
 if(NOT $ENV{PROCESSOR_ARCHITECTURE} MATCHES "ARM64")
    file(GLOB_RECURSE shared_libs ${CMAKE_CURRENT_SOURCE_DIR}/${MINGW_PATH}/*.dll.a)
